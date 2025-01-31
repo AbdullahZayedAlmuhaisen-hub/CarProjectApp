@@ -1,10 +1,130 @@
 ﻿@page
 @model IndexModel
 @{
-    ViewData["Title"] = "Home page";
+    ViewData["Title"] = "Car Info";
 }
+<link href="~/css/customstyle/stylecustom.css" rel="stylesheet" />
+<link href="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css" rel="stylesheet">
+<link href="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/css/bootstrap-datepicker.min.css" rel="stylesheet">
+<link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.0.0-beta3/css/all.min.css">
+<link rel="stylesheet" type="text/css" href="https://cdn.datatables.net/1.11.5/css/jquery.dataTables.min.css">
+<link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/sweetalert2@11/dist/sweetalert2.min.css">
+<div class="container-fluid">
+    <div class="row" style="    padding-bottom: 50px;">
+        <div class="col-sm p-3 min-vh-100">
+            <div class="col-lg-12">
+               <div class="row">
+                   <div class="col-lg-6">
+                        <h2>Car Information </h2>
+                   </div>
+                    <div class="col-lg-6" style="    text-align: end;">
+                        <a download="howToUse" href="~/css/customstyle/stylecustom.css" class="btn btn-info mb-2 customColor">How To Use? <i class="fa-solid fa-download"></i></a>
+                   </div>
+               </div>
+            </div>
+            <hr />
+            <p></p>
+            <div class="bd-callout bd-callout-warning">
+                <h4>Available vehicle types and models?</h4>
+                <span>Select car make and manufacture year of a car, and see available vehicle types and models for the selected/entered criteria :<br /></span>
 
-<div class="text-center">
-    <h1 class="display-4">Welcome</h1>
-    <p>Learn about <a href="https://learn.microsoft.com/aspnet/core">building Web apps with ASP.NET Core</a>.</p>
+                <div class="row" style="    margin-top: 15px;">
+                    
+                    <div class="col-lg-5">
+                        <label for="carMakeSelect">Make:</label>
+
+                        <select class="form-control" id="carMakeSelect">
+                            <option value="" selected disabled>Loading...</option>
+                        </select>
+                    </div>
+                    <div class="col-lg-5">
+                        <label for="year">Year:</label>
+                        <input class="date-own form-control" id="year" style="width: 300px;" type="text">
+
+                    </div>
+                    <div class="col-lg-2 CustomSearch">
+                        <button id="searchButton" type="submit" class="btn btn-primary mb-2 customColor">Search</button>
+                        <button id="ClearButton" type="submit" class="btn btn-info mb-2 customColor">Clear Filter</button>
+                    </div>
+                </div>
+             </div>
+            
+            <div id="SearchTableTitle" class=" tableTitle col-lg-12" style="display:none">
+                <hr2  class="title">Models for Make Id And Year</hr2>
+            </div>
+            <table id="SearchTable" border="1" style="width:100%;display:none">
+                <thead>
+                    <tr>
+                        <th>Make ID</th>
+                        <th>Make Name</th>
+                        <th>Model_ID</th>
+                        <th>Model_Name</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody2"></tbody>
+            </table>
+            <div id="SearchTableFooter" style="text-align: -webkit-center;margin-top: 10px;display:none">
+                <button id="prevBtn2" class="btn btn-primary customColor"><i class="fas fa-chevron-left"></i></button>
+                <span id="pageNumber2">1</span>
+                <button id="nextBtn2" class="btn btn-primary customColor"><i class="fas fa-chevron-right"></i></button>
+
+            </div>
+
+            <div id="allMakesTableTitle" class=" tableTitle col-lg-12">
+                <hr2  class="title">All Makes</hr2>
+            </div>
+            <table id="allMakesTable" border="1" style="width:100%">
+                <thead>
+                    <tr>
+                        <th>Make ID</th>
+                        <th>Make Name</th>
+                        <th style="    text-align: -webkit-center;">Make Detail</th>
+                    </tr>
+                </thead>
+                <tbody id="tableBody"></tbody>
+            </table>
+            <div id="allMakesTableFooter" style="text-align: -webkit-center;margin-top: 10px;">
+                <button id="prevBtn" class="btn btn-primary customColor"><i class="fas fa-chevron-left"></i></button>
+                <span id="pageNumber">1</span>
+                <button id="nextBtn" class="btn btn-primary customColor"><i class="fas fa-chevron-right"></i></button>
+
+            </div>
+
+
+        </div>
+    </div>
+    <div class="modal fade" id="exampleModalLong" tabindex="-1" role="dialog" aria-labelledby="exampleModalLongTitle" aria-hidden="true">
+        <div class="modal-dialog" role="document">
+            <div class="modal-content">
+                <div class="modal-header">
+                    <h5 class="modal-title" id="exampleModalLongTitle">Vehicle Types</h5>
+                    <button type="button" class="close" data-dismiss="modal" aria-label="Close">
+                        <span aria-hidden="true">&times;</span>
+                    </button>
+                </div>
+                <div class="modal-body">
+                    <div class="col-auto">
+                        <label class="sr-only" for="inlineFormInputGroup">Username</label>
+                        <div class="input-group mb-2">
+                            <div class="input-group-prepend">
+                                <div class="input-group-text">Type</div>
+                            </div>
+                            <input type="text" class="form-control" id="typeInput" placeholder="Username" disabled>
+                        </div>
+                    </div>
+                </div>
+                <div class="modal-footer">
+                    <button type="button" class="btn btn-secondary" data-dismiss="modal">Close</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
 </div>
+<script src="https://code.jquery.com/jquery-3.6.4.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
+<script src="https://maxcdn.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/bootstrap-datepicker/1.9.0/js/bootstrap-datepicker.min.js"></script>
+<script type="text/javascript" charset="utf8" src="https://cdn.datatables.net/1.11.5/js/jquery.dataTables.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+<script src="~/js/customjs.js"></script>
